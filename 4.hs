@@ -10,4 +10,4 @@ isPalindrome n =
    in nStr == reverse nStr
 
 allProducts :: Int -> Int -> [Int]
-allProducts m n = map (*) [m .. n] <*> [m .. n]
+allProducts m n = (*) <$> [m .. n] <*> [m .. n]

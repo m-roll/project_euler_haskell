@@ -6,6 +6,8 @@ import Data.Char (digitToInt)
 import Data.List (tails)
 import Data.Traversable (sequenceA)
 
+-- pipe 8.in into this program like `cat 8.in | ./8.hs'
+
 main :: IO ()
 main = do
   inputString <- getContents

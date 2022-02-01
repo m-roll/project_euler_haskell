@@ -28,14 +28,16 @@ gridsize = 20
 main :: IO ()
 main = print . maximum . map product . traverseGridLines nn . input =<< getContents
 
+-- there has got to be a more semantic way to do this
 linearTraversals :: Int -> [LinearGridTraversal a]
 linearTraversals n = map (n &) [traverseHorizonalSegments, traverseVerticalSegments, traverseRightDiagonal, traverseLeftDiagonal]
 
 traverseGridLines :: Int -> LinearGridTraversal a
 traverseGridLines n grid = concatMap (grid &) (linearTraversals n)
 
+--interesting learning: =<< and concatMap seem to be equivalent?
 traverseHorizonalSegments :: Int -> LinearGridTraversal a
-traverseHorizonalSegments n = concatMap $ windows n
+traverseHorizonalSegments n = (windows n) >>=
 
 traverseVerticalSegments :: Int -> LinearGridTraversal a
 traverseVerticalSegments n xs = traverseHorizonalSegments n (gridRotate90 xs)
@@ -53,7 +55,7 @@ gridDiagonal ((corner : _) : rest) = corner : gridDiagonal (map tail rest)
 
 -- all nxn grid windows. kind of squinty here. Use these boxes for diagonals.
 gridWindows :: Int -> RectangeGridTraversal a
-gridWindows n xs = concatMap (transpose . map (windows n)) (windows n xs)
+gridWindows n xs = windows n xs >>= (transpose . map (windows n))
 
 -- grid utilities
 gridRotate90 :: Grid a -> Grid a

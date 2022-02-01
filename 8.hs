@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p "haskellPackages.ghcWithPackages (pkgs: with pkgs; [])" -i runhaskell
 
-import Control.Applicative
+import Control.Applicative (ZipList (ZipList, getZipList))
 import Data.Char (digitToInt)
 import Data.List (tails)
 import Data.Traversable (sequenceA)

@@ -3,6 +3,7 @@
 
 import Control.Applicative (ZipList (ZipList, getZipList))
 import Data.ByteString (foldl)
+import Data.Function ((&))
 import Data.List (tails, transpose)
 import Data.List.Split (divvy)
 
@@ -15,6 +16,10 @@ type Row a = [a]
 -- Grid is assumed to always be a rectangle (basically just a matrix). Could use vectors to enforce this
 type Grid a = [Row a]
 
+type LinearGridTraversal a = Grid a -> [[a]]
+
+type RectangeGridTraversal a = Grid a -> [Grid a]
+
 -- parameters from the problem
 nn = 4
 
@@ -23,19 +28,22 @@ gridsize = 20
 main :: IO ()
 main = print . maximum . map product . traverseGridLines nn . input =<< getContents
 
-traverseGridLines :: Int -> Grid a -> [[a]]
-traverseGridLines n grid = concatMap (\f -> f n grid) [traverseHorizonalSegments, traverseVerticalSegments, traverseRightDiagonal, traverseLeftDiagonal]
+linearTraversals :: Int -> [LinearGridTraversal a]
+linearTraversals n = map (n &) [traverseHorizonalSegments, traverseVerticalSegments, traverseRightDiagonal, traverseLeftDiagonal]
 
-traverseHorizonalSegments :: Int -> Grid a -> [[a]]
+traverseGridLines :: Int -> LinearGridTraversal a
+traverseGridLines n grid = concatMap (grid &) (linearTraversals n)
+
+traverseHorizonalSegments :: Int -> LinearGridTraversal a
 traverseHorizonalSegments n = concatMap $ windows n
 
-traverseVerticalSegments :: Int -> Grid a -> [[a]]
+traverseVerticalSegments :: Int -> LinearGridTraversal a
 traverseVerticalSegments n xs = traverseHorizonalSegments n (gridRotate90 xs)
 
-traverseRightDiagonal :: Int -> Grid a -> [[a]]
+traverseRightDiagonal :: Int -> LinearGridTraversal a
 traverseRightDiagonal n xs = map gridDiagonal $ gridWindows n xs
 
-traverseLeftDiagonal :: Int -> Grid a -> [[a]]
+traverseLeftDiagonal :: Int -> LinearGridTraversal a
 traverseLeftDiagonal n = traverseRightDiagonal n . gridMirrorVertically
 
 gridDiagonal :: Grid a -> [a]
@@ -44,7 +52,7 @@ gridDiagonal [] = []
 gridDiagonal ((corner : _) : rest) = corner : gridDiagonal (map tail rest)
 
 -- all nxn grid windows. kind of squinty here. Use these boxes for diagonals.
-gridWindows :: Int -> Grid a -> [Grid a]
+gridWindows :: Int -> RectangeGridTraversal a
 gridWindows n xs = concatMap (transpose . map (windows n)) (windows n xs)
 
 -- grid utilities

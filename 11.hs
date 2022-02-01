@@ -37,7 +37,7 @@ traverseGridLines n grid = concatMap (grid &) (linearTraversals n)
 
 --interesting learning: =<< and concatMap seem to be equivalent?
 traverseHorizonalSegments :: Int -> LinearGridTraversal a
-traverseHorizonalSegments n = (windows n) >>=
+traverseHorizonalSegments n = (=<<) (windows n)
 
 traverseVerticalSegments :: Int -> LinearGridTraversal a
 traverseVerticalSegments n xs = traverseHorizonalSegments n (gridRotate90 xs)

@@ -23,11 +23,10 @@ collatzMap = foldM collatzLengths (singleton 1 1) [1 .. 1000000]
 
 collatzLengths :: Map Int Int -> Int -> Maybe (Map Int Int)
 collatzLengths cache n
-  | n == 1 = Just cache
-  | otherwise = case Map.lookup n cache of
-    Nothing -> collatzLengths cache nextInSeq >>= \newCache -> fmap (\nextDepth -> insert n (nextDepth + 1) newCache) (Map.lookup nextInSeq newCache)
-    Just _ -> Just cache
+  | n `Map.member` cache = Just cache
+  | otherwise = do
+    newCache <- collatzLengths cache nextInSeq
+    nextDepth <- Map.lookup nextInSeq newCache
+    pure $ insert n (nextDepth + 1) newCache
   where
-    evenCollatz = n `div` 2
-    oddCollatz = 3 * n + 1
-    nextInSeq = if even n then evenCollatz else oddCollatz
+    nextInSeq = if even n then n `div` 2 else 3 * n + 1

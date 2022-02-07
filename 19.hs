@@ -6,8 +6,6 @@ import Data.List.Split (splitPlaces)
 main :: IO ()
 main = print . length $ filter ((==) sunday . head) (drop 12 dates)
 
---main = print . length . concat $ year 1999
-
 dates :: [[Int]]
 dates = splitPlaces (concatMap year [1900 .. 2000]) days
 

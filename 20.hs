@@ -3,6 +3,13 @@
 
 -- use the boxed Integer type for unbounded ints
 
+-- NOTE: Learned some cool stuff here about tail recursion vs guarded recursion.
+-- In Haskell, due to laziness, tail calls (at least in this example) can be
+-- LESS efficient than guarded recursion due to thunked computations.
+-- Guarded recursion can actually be more-performant memory-wise, so the
+-- non-tail-recursive function may actually be the better answer here.
+-- More info: https://stackoverflow.com/questions/13042353/does-haskell-have-tail-recursive-optimization
+
 main :: IO ()
 main = print . sum . map (read . pure) . show $ fact 100
 

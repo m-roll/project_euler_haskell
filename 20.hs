@@ -20,9 +20,13 @@ main = print . sum . map (read . pure) . show $ fact 100
 
 -- tail-recursive
 
+-- fact :: Integer -> Integer
+-- fact n = f 1 1
+--  where
+--    f m acc
+--      | n == m = m * acc
+--      | otherwise = f (m + 1) acc * m
+
+-- Haskell "good style" way
 fact :: Integer -> Integer
-fact n = f 1 1
-  where
-    f m acc
-      | n == m = m * acc
-      | otherwise = f (m + 1) acc * m
+fact n = product [1 .. n]

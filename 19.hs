@@ -4,10 +4,10 @@
 import Data.List.Split (splitPlaces)
 
 main :: IO ()
-main = print . length $ filter ((==) sunday . head) (drop 12 dates)
+main = print . length $ filter ((==) sunday . head) (drop 12 months)
 
-dates :: [[Int]]
-dates = splitPlaces (concatMap year [1900 .. 2000]) days
+months :: [[Int]]
+months = splitPlaces (concatMap year [1900 .. 2000]) days
 
 year :: Int -> [Int]
 year y = map (monthLength y) [1 .. 12]

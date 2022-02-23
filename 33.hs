@@ -5,6 +5,7 @@ import Data.List (nub)
 import Data.Ratio (Ratio, denominator, (%))
 
 -- could restrict problem space so dont need to filter <1
+-- TODO: This is horribly long and probably doesn't need to use all the tuple stuff.
 main :: IO ()
 main = print . denominator . product . filter (< 1) . map doublePairToRational . filter nonTrivial $ filter canFakeReduce allMagicRatiosWithSharedDigit
 

@@ -14,6 +14,8 @@ main = print $ p <$> maximumBy (comparing length) (groupBy ((==) `on` p) (sortOn
 
 data Triangle = Triangle Integer Integer Integer deriving (Show)
 
+
+-- Could insteead use euclid's formula for generating triplets.
 rightTriangles :: [Triangle]
 rightTriangles = catMaybes [rightTriangle a b | a <- [1..1000],
                                       b <- [a..1000]]
